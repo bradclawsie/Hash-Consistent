@@ -30,6 +30,7 @@ class Hash::Consistent is export {
     has PosInt %!hashed;            # A cache of previously computed crc32 hashes.
 
     submethod BUILD(PosInt:D :$mult) {
+        warn "warning: coercing True to 1" if $mult ~~ Bool; # PosInt includes perl6 says Int(True) => 1
         $!mult := $mult;
         $!lock = Lock.new;
     }
@@ -45,7 +46,7 @@ class Hash::Consistent is export {
             }
         );            
     }
-    
+
     method !mult_elt(NonEmptyStr:D $s,Cool:D $i) {
         return $s ~ '.' ~ Str($i);
     }
@@ -75,7 +76,9 @@ class Hash::Consistent is export {
                 if (@!sum_list.elems != $n) {
                     X::Hash::Consistent::Corrupt.new(input => $s).throw;
                 }
-                X::Hash::Consistent::IsEmpty.new(payload => 'Cannot find in empty consistent hash').throw if $n == 0;
+                if $n == 0 {
+                    X::Hash::Consistent::IsEmpty.new(payload => 'Cannot find in empty consistent hash').throw;
+                }
                 my PosInt $crc32 = self!getCRC32($s);
                 if ($n == 1) || ($crc32 >= @!sum_list[$n-1]) {
                     # If there is only one element in sum_list, or, if given crc32 is greater than the last
