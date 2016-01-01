@@ -33,4 +33,26 @@ lives-ok {
     is $ch.sum_list.elems(), 4, 'correct hash cardinality';
 }, 'cardinality';
 
+lives-ok {
+    my $ch = Hash::Consistent.new(mult=>2);
+    $ch.insert('example.org');
+    $ch.insert('example.com');
+    is $ch.sum_list.elems(), 4, 'correct hash cardinality';
+    # > $ch.print();
+    # 0: 2725249910 [crc32 of example.org.0 derived from example.org]
+    # 1: 3210990709 [crc32 of example.com.1 derived from example.com]
+    # 2: 3362055395 [crc32 of example.com.0 derived from example.com]
+    # 3: 3581359072 [crc32 of example.org.1 derived from example.org]
+
+    # > String::CRC32::crc32('blah');
+    # 3458818396
+    # (should find next at 3581359072 -> example.org)
+    is $ch.find('blah'), 'example.org', 'found blah -> example.org';
+
+    # > String::CRC32::crc32('whee');
+    # 3023755156
+    # (should find next at 3210990709 -> example.com)
+    is $ch.find('whee'), 'example.com', 'found whee -> example.com';
+}, 'find';
+
 done-testing;
