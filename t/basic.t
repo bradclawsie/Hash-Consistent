@@ -100,12 +100,12 @@ lives-ok {
     # > String::CRC32::crc32('blah');
     # 3458818396
     # (should find next at 3581359072 -> example.org)
-    is $ch.find('blah'), 'example.org', 'found blah -> example.org';
+    is $ch.find('blah'), 'example.org', 'found correct entry (1)';
 
     # > String::CRC32::crc32('whee');
     # 3023755156
     # (should find next at 3210990709 -> example.com)
-    is $ch.find('whee'), 'example.com', 'found whee -> example.com';
-}, 'find';
+    is $ch.find('whee'), 'example.com', 'found correct entry (2)';
+}, 'found results where they were expected';
 
 done-testing;
