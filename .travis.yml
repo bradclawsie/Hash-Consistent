@@ -3,3 +3,7 @@ sudo: false
 language: perl6
 perl6:
   - latest
+install:
+  - rakudobrew build-panda
+  - panda install String::CRC32
+  - panda install Subsets::Common
