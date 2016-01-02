@@ -7,6 +7,9 @@
     "provides" : {
         "Hash::Consistent" : "lib/Hash/Consistent.pm6"
     },
-    "depends" : [ ],
+    "depends" : [
+              "String::CRC32",
+              "Subsets::Common"
+    ],
     "source-url" : "git://github.com/bradclawsie/Hash-Consistent.git"
 }
