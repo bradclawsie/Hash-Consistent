@@ -1,8 +1,4 @@
-#!/usr/bin/env perl6
-
 use v6;
-use String::CRC32;
-use Subsets::Common;
 
 =begin pod
 
@@ -69,6 +65,9 @@ https://b7j0c.org/stuff/license.txt
 =end pod
 
 unit module Hash::Consistent:auth<bradclawsie>:ver<0.0.1>;
+
+use String::CRC32;
+use Subsets::Common;
 
 class X::Hash::Consistent::Collision is Exception is export {
     has $.input;
