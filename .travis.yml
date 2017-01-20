@@ -8,4 +8,3 @@ install:
 
 before_script:
   - zef --/test --/test-depends install String::CRC32;
-  - zef --/test --/test-depends install Subsets::Common;
