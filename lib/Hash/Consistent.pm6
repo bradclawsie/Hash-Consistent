@@ -64,7 +64,7 @@ https://b7j0c.org/stuff/license.txt
 
 =end pod
 
-unit module Hash::Consistent:auth<bradclawsie>:ver<0.0.2>;
+unit module Hash::Consistent:auth<bradclawsie>:ver<0.0.3>;
 
 use String::CRC32;
 
@@ -84,9 +84,20 @@ class X::Hash::Consistent::ConstructionError is Exception is export {
     method message() { "Construction failure: $.input" }
 }
 
-class X::Hash::Consistent::InsertFailure is Exception is export {}
-class X::Hash::Consistent::RemoveFailure is Exception is export {}
-class X::Hash::Consistent::IsEmpty is Exception is export {}
+class X::Hash::Consistent::InsertFailure is Exception is export {
+    has $.input;
+    method message() { "Insert failure: $.input" }
+}
+
+class X::Hash::Consistent::RemoveFailure is Exception is export {
+    has $.input;
+    method message() { "Remove failure: $.input" }
+}
+
+class X::Hash::Consistent::IsEmpty is Exception is export {
+    has $.input;
+    method message() { "Empty Hash failure: $.input" }
+}
 
 class Hash::Consistent is export {
     
@@ -140,7 +151,7 @@ class Hash::Consistent is export {
                     X::Hash::Consistent::Corrupt.new(input => $s).throw;
                 }
                 if $n == 0 {
-                    X::Hash::Consistent::IsEmpty.new(payload => 'Cannot find in empty consistent hash').throw;
+                    X::Hash::Consistent::IsEmpty.new(input => 'hash empty').throw;
                 }
                 my UInt $crc32 = self!getCRC32($s);
                 if ($n == 1) || ($crc32 >= @!sum_list[$n-1]) {
@@ -180,7 +191,7 @@ class Hash::Consistent is export {
    }
    
    method remove(Str:D $s) {
-       X::Hash::Consistent::RemoveFailure.new(payload => 'empty str').throw if $s eq '';
+       X::Hash::Consistent::RemoveFailure.new(input => 'empty str').throw if $s eq '';
        $!lock.protect(
            {
                for ^$!mult -> $i {
@@ -188,7 +199,7 @@ class Hash::Consistent is export {
                        self!remove_one(mult_elt($s,$i));
                        CATCH {
                            default {
-                               X::Hash::Consistent::RemoveFailure.new(payload => $!.message()).throw;
+                               X::Hash::Consistent::RemoveFailure.new(input => $!.message()).throw;
                            }
                        }
                    }
@@ -216,7 +227,7 @@ class Hash::Consistent is export {
     }
     
     method insert(Str:D $s) {
-        X::Hash::Consistent::InsertFailure.new(payload => 'empty str').throw if $s eq '';
+        X::Hash::Consistent::InsertFailure.new(input => 'empty str').throw if $s eq '';
         $!lock.protect(
            {
                for ^$!mult -> $i {
@@ -226,7 +237,7 @@ class Hash::Consistent is export {
                            default {
                                # If any insert failed, we must remove any insertions made for $s.
                                self.remove($s);
-                               X::Hash::Consistent::InsertFailure.new(payload => $!.message()).throw;
+                               X::Hash::Consistent::InsertFailure.new(input => $!.message()).throw;
                            }
                        }
                    }
