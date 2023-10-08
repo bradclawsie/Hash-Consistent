@@ -1,4 +1,5 @@
-[![Build Status](https://travis-ci.org/bradclawsie/Hash-Consistent.png)](https://travis-ci.org/bradclawsie/Hash-Consistent)
+[![License:BSD](https://img.shields.io/badge/License-BSD-yellow.svg)](https://opensource.org/licenses/BSD-2-Clause)
+[![ci](https://github.com/bradclawsie/Hash-Consistent/workflows/test/badge.svg)](https://github.com/bradclawsie/Hash-Consistent/actions)
 
 # Hash::Consistent
 
@@ -53,4 +54,16 @@ http://www.tomkleinpeter.com/2008/03/17/programmers-toolbox-part-3-consistent-ha
 ## AUTHOR
 
 Brad Clawsie (zef:bradclawsie, email:brad@b7j0c.org) 
+
+## Notice
+
+This repository was uploaded via `fez` under the username `b7j0c`,
+and later `bradclawsie`. This change was made so the username would match
+Github. Sorry for any confusion.
+
+## Installation
+
+```
+zef install Hash::Consistent
+```
 
