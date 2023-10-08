@@ -29,6 +29,6 @@ jobs:
       - name: Force install TAP
         run: zef install --force-install --/test -v TAP
       - name: Install App::Prove6
-        run: zef install App::Prove6
+        run: zef install --force-install --/test -v App::Prove6
       - name: Run Tests
         run: prove6 -l t
