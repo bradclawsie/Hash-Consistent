@@ -74,7 +74,7 @@ lives-ok {
     my constant $bar = 'bar';
     $ch.insert($foo);
     $ch.insert($bar);
-    
+
     # gives this consistent hash:
     # 0: 2856785838 [crc32 of foo.1 derived from foo]
     # 1: 2884040318 [crc32 of bar.1 derived from bar]
@@ -83,7 +83,7 @@ lives-ok {
 
     is $ch.find('hello'), $foo, 'found correct entry (1)';
     is $ch.find('hello there my name is Camelia. I like to program'), $bar, 'found correct entry (2)';
-    
+
 }, 'found results where they were expected';
 
 lives-ok {

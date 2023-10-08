@@ -1,8 +1,8 @@
 [![Build Status](https://travis-ci.org/bradclawsie/Hash-Consistent.png)](https://travis-ci.org/bradclawsie/Hash-Consistent)
 
-# Hash::Consistent 
+# Hash::Consistent
 
-A perl6 implementation of a Consistent Hash.
+A Raku implementation of a Consistent Hash.
 
 ## DESCRIPTION
 
@@ -15,14 +15,14 @@ Once flags are entered into the hash, we can find which flag would be associated
 a candidate string of our choice. A typical use-case for this is to enter host
 names into the hash the represent destination hosts where values are stored
 for particular keys, as determined by the result of searching for the corresponding
-flag in the hash. 
-                                         
+flag in the hash.
+
 This technique is best explained in these links:
 
 http://en.wikipedia.org/wiki/Consistent_hashing
 
 http://www.tomkleinpeter.com/2008/03/17/programmers-toolbox-part-3-consistent-hashing/
-    
+
 ## SYNOPSIS
 
     use v6;
@@ -50,11 +50,7 @@ http://www.tomkleinpeter.com/2008/03/17/programmers-toolbox-part-3-consistent-ha
     # (should find next at 3210990709 -> example.com)
     is $ch.find('whee'), 'example.com', 'found whee -> example.com';
 
-## AUTHOR 
+## AUTHOR
 
-Brad Clawsie (PAUSE:bradclawsie, email:brad@b7j0c.org) 
-
-## LICENSE 
-
-This module is licensed under the BSD license, see: https://b7j0c.org/stuff/license.txt
+Brad Clawsie (zef:bradclawsie, email:brad@b7j0c.org) 
 

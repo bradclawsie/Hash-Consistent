@@ -17,14 +17,14 @@ Once flags are entered into the hash, we can find which flag would be associated
 a candidate string of our choice. A typical use-case for this is to enter host
 names into the hash the represent destination hosts where values are stored
 for particular keys, as determined by the result of searching for the corresponding
-flag in the hash. 
-                                         
+flag in the hash.
+
 This technique is best explained in these links:
 
 http://en.wikipedia.org/wiki/Consistent_hashing
 
 http://www.tomkleinpeter.com/2008/03/17/programmers-toolbox-part-3-consistent-hashing/
-    
+
 =head1 SYNOPSIS
 
     use v6;
@@ -54,17 +54,11 @@ http://www.tomkleinpeter.com/2008/03/17/programmers-toolbox-part-3-consistent-ha
 
 =head1 AUTHOR
 
-Brad Clawsie (PAUSE:bradclawsie, email:brad@b7j0c.org)
-
-=head1 LICENSE
-
-This module is licensed under the BSD license, see:
-
-https://b7j0c.org/stuff/license.txt
+Brad Clawsie (zef:bradclawsie, email:brad@b7j0c.org)
 
 =end pod
 
-unit module Hash::Consistent:auth<bradclawsie>:ver<0.0.3>;
+unit module Hash::Consistent:auth<bradclawsie>:ver<0.0.4>;
 
 use String::CRC32;
 
@@ -100,7 +94,7 @@ class X::Hash::Consistent::IsEmpty is Exception is export {
 }
 
 class Hash::Consistent is export {
-    
+
     has UInt $.mult is required; # Number of times to multiply each entry in the consistent hash.
     has UInt @.sum_list;   # The list of crc32 hashes, maintained in sorted order.
     has Str %!mult_source; # The mapping of crc32 hash values to the corresponding "mult" string.
@@ -123,7 +117,7 @@ class Hash::Consistent is export {
                     $j++;
                 }
             }
-        );            
+        );
     }
 
     my sub mult-elt(Str:D $s,Cool:D $i) {
@@ -131,7 +125,7 @@ class Hash::Consistent is export {
     }
 
     method !sorted-hashes() {
-        return %!mult_source.keys.map( { Int($_) } ).sort;    
+        return %!mult_source.keys.map( { Int($_) } ).sort;
     }
 
     # Cache CRC32 hashes.
@@ -141,11 +135,11 @@ class Hash::Consistent is export {
         %!hashed{$s} = $crc32;
         return $crc32;
     }
-    
+
     method find(Str:D $s --> Str:D) {
         $!lock.protect(
             {
-                my Int $mult_source_crc32 = 0; 
+                my Int $mult_source_crc32 = 0;
                 my $n = %!mult_source.keys.elems;
                 if (@!sum_list.elems != $n) {
                     X::Hash::Consistent::Corrupt.new(input => $s).throw;
@@ -156,7 +150,7 @@ class Hash::Consistent is export {
                 my UInt $crc32 = self!get-CRC32($s);
                 if ($n == 1) || ($crc32 >= @!sum_list[$n-1]) {
                     # If there is only one element in sum_list, or, if given crc32 is greater than the last
-                    # element in the list, then return the 0th element. 
+                    # element in the list, then return the 0th element.
                     $mult_source_crc32 = @!sum_list[0];
                 } else {
                     for @!sum_list -> $i {
@@ -167,7 +161,7 @@ class Hash::Consistent is export {
                     }
                 }
 
-                unless %!source{%!mult_source{$mult_source_crc32}}:exists {  
+                unless %!source{%!mult_source{$mult_source_crc32}}:exists {
                     X::Hash::Consistent::Corrupt.new(input => $mult_source_crc32).throw;
                 }
                 return %!source{%!mult_source{$mult_source_crc32}};
@@ -189,7 +183,7 @@ class Hash::Consistent is export {
            X::Hash::Consistent::Corrupt.new(input => $s).throw;
        }
    }
-   
+
    method remove(Str:D $s) {
        X::Hash::Consistent::RemoveFailure.new(input => 'empty str').throw if $s eq '';
        $!lock.protect(
@@ -213,7 +207,7 @@ class Hash::Consistent is export {
         if $crc32 == @!sum_list.any {
             if %!mult_source{$crc32}:exists {
                 # Just return, the string is already in the consistent hash.
-                return; 
+                return;
             } else {
                 # The string is not in the consistent hash yet produces a crc32
                 # that collides with an existing entry.
@@ -225,7 +219,7 @@ class Hash::Consistent is export {
         %!source{$mult_s} = $s;
         return;
     }
-    
+
     method insert(Str:D $s) {
         X::Hash::Consistent::InsertFailure.new(input => 'empty str').throw if $s eq '';
         $!lock.protect(
